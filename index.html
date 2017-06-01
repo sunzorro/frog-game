@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<title>爱迪尔珠宝送钻石</title>
+
+<link rel="stylesheet" href="css/style.css">
+<script type="text/javascript" src="js/flappy.js"></script>
+<script type="text/javascript" src="js/game.js"></script>
+
+    
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/modernizr.2.5.3.min.js"></script>
+<script type="text/javascript" src="js/audio-fx.min.js"></script>
+<script type="text/javascript" src="js/preload.js"></script>  
+
+<script type="text/javascript" src="js/jweixin-1.2.0.js"></script>  
+
+<script type="text/javascript" src="js/main.js"></script>
+
+   
+</head>
+<body>
+
+<!--加载中开始...-->
+<div class="loading" id="loading">
+    
+	<div class='mianfeina'></div>
+    <div class='loading_bg'>
+		<div class='jindutiao1'></div>
+        <div class='jindutiao'>
+            <div class='jindutiao_bg' id='jindutiao_bg'></div>
+		</div>
+        <div class='nulijiazai'></div>
+    </div>
+</div>
+<!--加载中结束...-->
+<!--隐藏的图片开始-->
+<div class="hide">
+    <img src="img/loading.jpg" />
+    <img src="img/loading_wenzi.png" />
+    <img src="img/loading_bg_03.png" />
+    <img src="img/jindutiao_03.png" />
+    <img src="img/loading_nulijiazai_03.png" />
+    <img src="img/bg.jpg" />
+    <img src="img/main.jpg" />
+    <img src="img/overbg1.jpg" />
+    <img src="img/overbg.jpg" />
+    <img src="img/tittle.png" />
+    <img src="img/pt.png" />
+    <img src="img/start_b.png" />
+    <img src="img/start.png" />
+    <img src="img/gg1.png" />
+    <img src="img/gg2.png" />
+    <img src="img/gg3.png" />
+    <img src="img/gz.png" />
+    <img src="img/tzcg.png" />
+    <img src="img/tzsb.png" />
+    <img src="img/bird.png" />
+    <img src="img/overbg.jpg" />
+    <img src="img/ground.png" />
+    <img src="img/main.jpg" />
+    <img src="img/tube_down.png" />
+    <img src="img/tube_up.png" />
+</div>
+
+			<div class="s2" style="display: none;">
+				<img id="ground" src="img/ground.png" />
+				<img id="bg" src="img/bg.jpg" />
+				<img id="bird" src="img/bird.png"/>
+				<img id="tube_down" src="img/tube_down.png"/>
+				<img id="tube_up" src="img/tube_up.png"/>
+
+				<canvas id="canvas" width="288" height="470"></canvas>
+				
+                <!--游戏广告位-->
+				<div class="gg1"></div>
+		        
+
+				<!--死掉后弹出的画面)-->
+				<div class="failed" style="width:100%">
+			    <div class="cur_num">100</div>
+	            <div class="best_num">100</div>
+	            <div class="p_num">915485</div>
+	            <a class="btn1" href="javascript:fx();"></a>
+	            <a class="btn2" href="javascript:bufuzaizhan();"></a>
+				<div class="gg2"></div>
+				<div class="bg"></div>
+				</div>
+
+
+				<!--通关画面-->
+				<div class="success" style="width:100%">
+	            <div class="p_num">915485</div>
+	            <a class="btn1" href="javascript:fx();"></a>
+	            <a class="btn2"></a>
+	            <div class="gg3"></div>
+				<div class="bg"></div>
+				</div>
+               
+               	<!--游戏规则-->
+				<div class="gz" style="width:100%">
+	            <div class="text">
+	            <p>1.参与游戏，控制青蛙飞跃障碍，飞得越远获得的钻石就越多哦~</p>
+                <p>2.飞跃过10个障碍就可以获得爱迪尔珠宝礼品一份。</p>
+                <p>3.每个玩家都有6次无条件试玩的机会。</p>
+                <p>4.6次以后还想玩？分享到朋友圈即可获得无限玩的权限。</p>
+                <p>5.获得礼品去哪里领？在5月5号-5月25号开业期间到任意一家爱迪尔</p>
+				</div>
+	            <a class="btn1" href="javascript:back();"></a>
+				<div class="bg"></div>
+				</div>
+               
+               
+                <!--开始前页面-->
+                <div class="start_b">
+                <div class="tittle"></div>
+                <div class="pt"></div>
+                <a class="btn1" href="javascript:hideStrat()"></a>
+                <a class="btn2" href="javascript:gz()"><i></i>活动细则</a>
+                </div>
+                
+				<div class="start" onclick="closeStart()"style="width:100%">	
+				</div>
+				
+			</div>
+
+<!--背景音乐播放按钮-->
+<a id="bgm_btn" href="javascript:bgmClick()" class="bgm_btn active"></a>
+<!--bgm从头至尾播-->
+<audio id="audio_bgm" src="img/bgm.mp3" preload="auto" loop></audio>
+		
+<script>
+    
+    var dNum = 6
+	//死掉后掉的方法,改为显示原来的死6次或通关20柱页面(一个当前成绩，一个最佳成绩)
+	function die(curNum,bestNum){
+        
+		$(".failed").show();
+		$(".start").hide();
+		$(".die").hide();
+		guan();
+		$(".failed .cur_num").html(10-curNum);
+	//	$(".failed .best_num").html(bestNum);
+		$(".gg2").addClass("active");
+		
+		dNum = dNum-1;
+		$(".failed .best_num").html(dNum);
+		if(dNum == 0){ $(".failed .btn1").attr("href","")}
+	}
+	//通关方法
+	function success(){
+		$(".success").show();
+        $(".failed").hide();
+		guan();
+		$(".gg3").addClass("active");
+	}
+	//游戏规则
+	function back(){
+		$(".gz").hide();
+		$(".start_b").show();
+	}
+	function gz(){
+		$(".gz").show();
+		$(".start_b").hide();
+	}
+	//关闭死掉后的画面
+	function closeDie(){
+        Sound.playSwoosh();
+        init();
+        $(".start").show();
+		$(".die").hide();
+		$(".failed").hide();
+		guan();
+		
+	}
+    
+    //bufuzaizhan
+    function bufuzaizhan(){
+        init();
+        
+		$(".start").show();
+        $(".die").hide();
+        
+        if(ifSupportStorage)
+		{
+            //清空死亡次数
+            storage.setItem('dead_times',0);
+            //清空最高记录次数
+            storage.setItem('high_score',0);
+          
+		}else{
+            
+		}
+        
+        $(".failed").hide();
+        
+        guan();
+		$(".gg1").removeClass("active");
+	}
+    
+    
+	//关闭开始游戏的画面
+	function closeStart(){
+        console.log('start');
+        Sound.playFlap();
+        game.birdSprite.velocity.y= -FLAP;			
+        game.status = PLAYING;
+		$(".start").hide();
+        kai();	
+		$(".gg1").addClass("active");
+	}
+	
+	
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    
+    function dynamicAddJSFile(filename,filetype){
+       
+        if(filetype == "js"){
+
+            var fileref = document.createElement('script');
+            fileref.setAttribute("type","text/javascript");
+            fileref.setAttribute("src",filename);
+
+        }else if(filetype == "css"){
+
+            var fileref = document.createElement('link');
+            fileref.setAttribute("rel","stylesheet");
+            fileref.setAttribute("type","text/css");
+            fileref.setAttribute("href",filename);
+
+        }
+
+        if(typeof fileref != "undefined"){
+            document.getElementsByTagName("head")[0].appendChild(fileref);
+        }
+    
+
+    }
+    
+    //获得当前客户端类型 1=WX 2=WB 3=QQ 4=APP
+    function getUAType(){
+        var ua = navigator.userAgent;
+        if(ua.toLowerCase().indexOf('wepiao')>-1||ua.toLowerCase().indexOf('gewaramovie')>-1){
+            return 4;
+        }else if(ua.toLowerCase().indexOf('qq')>-1){
+            return 3;
+        }
+        return 1;
+    }
+    
+    function getAppType(){
+        var ua = navigator.userAgent;
+        if(ua.toLowerCase().indexOf('wepiao')>-1){
+            //娱票儿
+            return 1;
+        }
+        //格瓦拉
+        return 2;
+    }
+    
+    function getSysType(){
+        var ua = navigator.userAgent;
+        if(ua.toLowerCase().indexOf('iphone')>-1||ua.toLowerCase().indexOf('ipad')>-1){
+            //iOS
+            return 1;
+        }
+        //Android
+        return 2;
+    }
+    
+    var APP_TOKEN='';
+    
+ //    prepareGame();
+    
+ //    //获得AppToken
+ //    function prepareGame(){
+        
+ //        var urlxx = window.location.origin+pathname;
+        
+	// 	$(".start_b").show();
+		
+	// }
+    
+    function saveHighScore(scoreStr){
+        console.log('写入最高分：' + scoreStr);
+        //如果不在APP中，则使用LocalStorage记录最高分
+        if(getUAType()!=4){
+            try {
+                window.localStorage.removeItem('high_score');
+                window.localStorage.setItem('high_score',scoreStr);
+            } catch (e) {
+                alert("您处于无痕浏览，无法为您保存分数。");
+            }
+        }
+        
+        //如果在APP中，存储高分都需要调用API
+        if(getUAType()==4){
+            hightestScore = scoreStr;
+        }
+        
+    }
+    
+    function loadHighScore(){
+        //如果不在APP中，则使用LocalStorage记录最高分
+        if(getUAType()!=4){
+            if(window.localStorage.getItem('high_score')==null)
+			{
+                hightestScore=0;
+                $(".die .best_num").html('0');
+                return 0;
+			}else{
+                hightestScore=window.localStorage.getItem('high_score');
+                $(".die .best_num").html(window.localStorage.getItem('high_score'));
+                return window.localStorage.getItem('high_score');
+            }
+        }
+        
+        //如果在APP中，存储高分都需要调用API
+        if(getUAType()==4){
+            $(".die .best_num").html(hightestScore);
+			return hightestScore;
+        }
+        
+    }
+    
+    
+    var title="我的最好成绩"+loadHighScore()+"分，你来挑战啊";
+    var desc="金一百店齐开送大礼";
+    
+    if((hightestScore>=0)==false){
+        title="我的最好成绩"+"0"+"分，你来挑战啊";
+        
+    }
+    
+    console.log(title);
+    //点击开始游戏方法
+    function hideStrat(){
+    	$(".start_b").hide();
+    }
+
+	function bgmClick(){
+		var audio = document.getElementById('audio_bgm');
+	    if(audio!==null){
+            if(audio.paused){
+				$("#bgm_btn").addClass("active");
+            	document.getElementById("audio_bgm").play();
+				document.addEventListener("WeixinJSBridgeReady", function () {
+			    	document.getElementById("audio_bgm").play();
+			    }, false);
+            }else{
+				$("#bgm_btn").removeClass("active");
+       			document.getElementById("audio_bgm").pause();
+				document.addEventListener("WeixinJSBridgeReady", function () {
+			    	document.getElementById("audio_bgm").pause();
+			    }, false);
+      		}
+		}
+	}
+</script>
+
+
+    
+
+</body>
+</html>
